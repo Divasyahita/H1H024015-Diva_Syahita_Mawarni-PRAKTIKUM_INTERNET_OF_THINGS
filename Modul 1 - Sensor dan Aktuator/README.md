@@ -316,3 +316,49 @@ Jadi, semakin rendah nilai threshold, semakin banyak kondisi suhu yang menyebabk
 
 **3. Apa perbedaan antara kendali aktuator secara terus-menerus (kondisi tunggal) dengan kendali menggunakan histerisis (dua ambang batas)?**
 
+Kendali aktuator dengan kondisi tunggal hanya menggunakan satu nilai threshold sebagai batas untuk menentukan aktuator ON atau OFF, sehingga ketika suhu melewati batas tersebut, status aktuator dapat langsung berubah. Sementara itu, kendali menggunakan histerisis memakai dua nilai ambang batas, yaitu batas untuk menyalakan dan batas untuk mematikan aktuator, sehingga aktuator dapat mempertahankan kondisi sebelumnya ketika suhu berada di antara kedua batas tersebut. Dengan demikian, kendali histerisis dapat membuat kerja aktuator lebih stabil dan mengurangi perubahan ON/OFF yang terlalu sering. 
+
+**4. Modifikasi program agar menggunakan dua ambang batas (histerisis), misalnya aktuator menyala pada suhu di atas 30°C dan baru mati pada suhu di bawah 28°C, dan berikan penjelasan di setiap baris kode nya.**
+Berikut adalah bagian *loop()* yang dimodifikasi beserta variabel pendukungnya:
+
+```cpp
+// 1. Mendefinisikan dua variabel konstanta (histerisis) untuk batas atas dan bawah
+const float suhuAtas = 30.0;
+const float suhuBawah = 28.0;
+
+void loop() {
+  // 2. Membaca data suhu dari sensor
+  float suhu = dht.readTemperature();
+
+  // 3. Mengecek apakah sensor berhasil membaca suhu
+  if (isnan(suhu)) {
+    Serial.println("Gagal membaca data sensor!");
+  } else {
+    // 4. Menampilkan suhu saat ini di Serial Monitor
+    Serial.print("Suhu: ");
+    Serial.print(suhu);
+    Serial.print(" °C -> ");
+
+    // 5. Logika Histerisis batas atas: Jika suhu lebih besar dari 30.0
+    if (suhu > suhuAtas) {
+      // 6. Memberi tegangan HIGH untuk mengaktifkan Relay/LED
+      digitalWrite(RELAYPIN, HIGH); 
+      Serial.println("Aktuator: ON");
+    } 
+    // 7. Logika Histerisis batas bawah: Jika suhu kurang dari 28.0
+    else if (suhu < suhuBawah) {
+      // 8. Menurunkan tegangan ke LOW untuk mematikan Relay/LED
+      digitalWrite(RELAYPIN, LOW);
+      Serial.println("Aktuator: OFF");
+    }
+    // 9. Kondisi jika suhu di antara 28.0 dan 30.0
+    // Pada rentang ini (contoh: 29.5), tidak ada instruksi perintah perubahan.
+    // Artinya mikrokontroler akan menahan (holding) perintah 'digitalWrite' yang 
+    // terakhir kali dieksekusi, sehingga status aktuator tetap stabil.
+  }
+  
+  // 10. Jeda 2 detik sebelum perulangan berikutnya
+  delay(2000); 
+}
+```
+
