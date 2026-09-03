@@ -12,8 +12,9 @@
 
 
 ### Sensor didekati ke AC
-<img width="1024" height="768" alt="IMG_20260901_145338_935" src="https://github.com/user-attachments/assets/bcce72c5-a2a3-4a22-9ace-c0caf1a2b062" />
 <img width="481" height="640" alt="IMG_20260901_145413_656" src="https://github.com/user-attachments/assets/7024f7a1-aee1-45bb-9987-a2a03549b503" />
+<img width="1024" height="768" alt="IMG_20260901_145338_935" src="https://github.com/user-attachments/assets/bcce72c5-a2a3-4a22-9ace-c0caf1a2b062" />
+
 
 
 ## Percobaan 2A
