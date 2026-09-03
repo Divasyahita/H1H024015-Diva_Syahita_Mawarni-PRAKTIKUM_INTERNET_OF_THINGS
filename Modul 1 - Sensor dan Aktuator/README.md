@@ -1,10 +1,32 @@
 # Modul 1 - Sensor dan Aktuator
-
+---
 README ini berisi pertanyaan praktikum, dokumentasi, penjelasan fungsi, kode, percabangan/conditional, serta library atau dependencies yang digunakan pada Percobaan 1A dan Percobaan 2A.
+
+A. TUJUAN PRAKTIKUM 
+
+Berdasarkan pemahaman setelah melakukan praktikum, tujuan yang ingin dicapai adalah:
+
+1. Memahami bagaimana ESP32 memperoleh data dari sensor. 
+2. Memahami cara membaca suhu dan kelembaban menggunakan sensor DHT11. 
+3. Memahami cara kerja aktuator relay yang dikendalikan oleh ESP32. 
+4. Mengimplementasikan sistem yang dapat mengaktifkan atau menonaktifkan 
+aktuator berdasarkan suhu. 
+5. Memahami hubungan antara data yang dibaca sensor → keputusan program → 
+respons aktuator. 
+6. Menganalisis bagaimana sistem IoT dapat merespons perubahan kondisi 
+lingkungan.
+
+B. ALAT DAN BAHAN  
+1. ESP32 
+2. Sensor DHT11
+3. Modul Relay 
+4. Breadboard 
+5. Kabel Jumper 
+6. Kabel USB 
 
 ---
 
-# Percobaan 1A
+# Percobaan 1A: Akuisisi Data Sensor DHT11 (Suhu dan Kelembaban)
 
 code
 ```cpp
@@ -84,7 +106,7 @@ Suhu: 30.20 °C, Kelembaban: 51.00%
 ```
 ---
 
-# Percobaan 2A 
+# Percobaan 2A: Kendali Aktuator Relay Berdasarkan Data Sensor 
 
 code
 ```cpp
