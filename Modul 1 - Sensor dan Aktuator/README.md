@@ -223,7 +223,7 @@ Jadi, threshold digunakan sebagai batas pengambilan keputusan untuk menentukan k
 ---
 
 
-# Jawaban Pertanyaan Praktikum Modul 1
+# Pertanyaan Praktikum 
 
 ## Percobaan 1A: Akuisisi Data Sensor DHT22
 
