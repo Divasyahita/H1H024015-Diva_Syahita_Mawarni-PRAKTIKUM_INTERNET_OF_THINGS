@@ -6,5 +6,4 @@
 **Fakultas:** Fakultas Teknik  
 **Universitas:** Universitas Jenderal Soedirman  
 **Mata Kuliah:** Praktikum Internet Of Things A
-**Praktikum:** Sensor dan Aktuator  
 **Tahun:** 2026
