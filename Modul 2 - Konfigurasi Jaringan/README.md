@@ -250,7 +250,7 @@ Ketika password atau SSID salah, ESP tidak berhasil melakukan koneksi. Serial Mo
 
 ---
 
-# F. PERCOBAAN 2B – MODE ACCESS POINT (AP)
+# E. PERCOBAAN 2B – MODE ACCESS POINT (AP)
 
 ## 1. Tujuan
 
@@ -335,7 +335,7 @@ Memberikan jeda selama 5 detik sebelum jumlah perangkat diperiksa kembali.
 
 ---
 
-# H. HASIL PENGAMATAN PERCOBAAN 2B
+# F. HASIL PENGAMATAN PERCOBAAN 2B
 
 ## 1. Pengamatan Access Point (AP)
 
@@ -376,7 +376,7 @@ Jumlah client bertambah sesuai dengan perangkat yang berhasil terhubung. Pada aw
 
 ---
 
-# J. PERTANYAAN PRAKTIKUM 2A
+# G. PERTANYAAN PRAKTIKUM 2A
 
 ## 1. Gambarkan diagram alur (flowchart) proses koneksi ESP32 ke jaringan WiFi pada program di atas! 
 
@@ -392,15 +392,137 @@ Jika SSID atau password yang dimasukkan salah, ESP tidak dapat terhubung ke jari
 
 ## 4. Modifikasi program agar ESP32 mencoba menghubungkan ulang (reconnect) secara otomatis apabila koneksi WiFi terputus, dan berikan penjelasan di setiap baris kode yang ditambahkan dalam bentuk README.md! 
 
-Program telah dimodifikasi agar ketika koneksi WiFi terputus, ESP akan mendeteksi status tersebut, mematikan LED, kemudian menjalankan `WiFi.begin(ssid, password)` untuk mencoba terhubung kembali secara otomatis.
+## Pertanyaan 2A
 
-**[TEMPAT FOTO HASIL RECONNECT]**
+### 4. Modifikasi program agar ESP32 mencoba menghubungkan ulang (reconnect) secara otomatis apabila koneksi WiFi terputus, dan berikan penjelasan di setiap baris kode yang ditambahkan!
 
-> Tambahkan screenshot Serial Monitor yang menunjukkan proses reconnect.
+Program dimodifikasi dengan menambahkan proses pengecekan koneksi WiFi pada fungsi `loop()`. Jika koneksi terputus, ESP akan mencoba menghubungkan kembali menggunakan SSID dan password yang telah ditentukan.
+
+```cpp
+#include <ESP8266WiFi.h>
+
+const char* ssid = "NAMA_WIFI_ANDA";
+const char* password = "PASSWORD_WIFI_ANDA";
+
+const int ledPin = 2; // LED indikator status koneksi
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  Serial.print("Menghubungkan ke WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.println("WiFi berhasil terhubung!");
+
+  Serial.print("IP Address : ");
+  Serial.println(WiFi.localIP());
+
+  Serial.print("MAC Address : ");
+  Serial.println(WiFi.macAddress());
+
+  Serial.print("RSSI (dBm) : ");
+  Serial.println(WiFi.RSSI());
+
+  digitalWrite(ledPin, HIGH);
+}
+
+void loop() {
+  // Cek status koneksi setiap 5 detik
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("Status: Terhubung");
+  } else {
+    Serial.println("Status: Terputus");
+    digitalWrite(ledPin, LOW);
+
+    // Mencoba menghubungkan kembali ke WiFi
+    Serial.println("Mencoba menghubungkan kembali...");
+    WiFi.begin(ssid, password);
+
+    // Menunggu sampai terhubung kembali
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
+    }
+
+    Serial.println();
+    Serial.println("WiFi berhasil terhubung kembali!");
+    digitalWrite(ledPin, HIGH);
+  }
+
+  delay(5000);
+}
+```
+
+### 1. Penjelasan Baris Kode yang Ditambahkan
+
+**1. Mengecek apakah WiFi masih terhubung**
+
+```cpp
+if (WiFi.status() == WL_CONNECTED) {
+```
+
+Baris ini digunakan untuk mengecek kondisi koneksi WiFi. Jika statusnya `WL_CONNECTED`, berarti ESP masih terhubung ke WiFi.
+
+**2. Jika koneksi terputus**
+
+```cpp
+} else {
+  Serial.println("Status: Terputus");
+  digitalWrite(ledPin, LOW);
+```
+
+Jika WiFi tidak terhubung, program masuk ke bagian `else`. Serial Monitor menampilkan **"Status: Terputus"** dan LED dimatikan sebagai indikator bahwa koneksi terputus.
+
+**3. Menjalankan proses reconnect**
+
+```cpp
+Serial.println("Mencoba menghubungkan kembali...");
+WiFi.begin(ssid, password);
+```
+
+Bagian ini digunakan untuk mencoba menghubungkan ESP kembali ke WiFi menggunakan SSID dan password yang sudah ditentukan.
+
+**4. Menunggu sampai berhasil terhubung**
+
+```cpp
+while (WiFi.status() != WL_CONNECTED) {
+  delay(500);
+  Serial.print(".");
+}
+```
+
+Program akan terus menunggu sampai status WiFi menjadi `WL_CONNECTED`. Selama proses tersebut, Serial Monitor menampilkan titik (`.`) setiap 500 ms sebagai tanda bahwa ESP masih mencoba melakukan koneksi.
+
+**5. Menampilkan bahwa reconnect berhasil**
+
+```cpp
+Serial.println();
+Serial.println("WiFi berhasil terhubung kembali!");
+```
+
+Setelah koneksi berhasil, program menampilkan pesan bahwa ESP sudah berhasil terhubung kembali ke WiFi.
+
+**6. Menyalakan kembali LED**
+
+```cpp
+digitalWrite(ledPin, HIGH);
+```
+
+LED dinyalakan kembali sebagai indikator bahwa koneksi WiFi sudah berhasil dipulihkan.
 
 ---
 
-# K. PERTANYAAN PRAKTIKUM 2B
+# H. PERTANYAAN PRAKTIKUM 2B
 
 ## 1. Mengapa IP Default AP adalah `192.168.4.1`?
 
@@ -495,7 +617,7 @@ void loop() {
 }
 ```
 
-###PENJELASAN PROGRAM AP + STA
+### PENJELASAN PROGRAM AP + STA
 
 `#include <ESP8266WiFi.h>`
 
@@ -593,8 +715,51 @@ Pada mode AP+STA, ESP mempunyai dua peran dalam jaringan:
 **AP:** ESP membuat jaringan WiFi sendiri yang dapat digunakan perangkat lain.
 
 ---
+# I. Pertanyaan Analisis
 
-# N. KESIMPULAN
+### 1. Uraikan hasil tugas pada praktikum yang telah dilakukan pada setiap percobaan!
+
+Pada **Percobaan 2A**, dilakukan konfigurasi WiFi pada mode **Station (STA)**. ESP dikonfigurasi sebagai perangkat yang terhubung ke jaringan WiFi yang sudah tersedia. Berdasarkan pengujian menggunakan kredensial yang benar, ESP berhasil terhubung ke WiFi dan menampilkan informasi berupa IP Address, MAC Address, RSSI, serta status koneksi pada Serial Monitor. LED juga menyala sebagai indikator bahwa koneksi berhasil.
+
+Ketika dilakukan pengujian menggunakan password yang salah dan SSID yang salah, ESP tidak berhasil terhubung ke WiFi. Serial Monitor terus menampilkan tanda titik karena program masih menunggu sampai status WiFi menjadi `WL_CONNECTED`, sedangkan LED tetap mati.
+
+Pada **Percobaan 2B**, ESP dikonfigurasi sebagai **Access Point (AP)** sehingga ESP dapat membuat jaringan WiFi sendiri. AP menggunakan SSID `apip diva hana`, password `12345678`, dan memiliki IP Address `192.168.4.1`. Hasil pengujian menunjukkan bahwa jaringan AP berhasil dibuat dan dapat ditemukan oleh smartphone. Pada pengujian jumlah client, awalnya tidak ada perangkat yang terhubung, kemudian satu smartphone terhubung, dan selanjutnya terdapat dua smartphone yang terhubung ke AP.
+
+Dari kedua percobaan tersebut dapat diketahui bahwa mode **Station** digunakan untuk menghubungkan ESP ke jaringan WiFi yang sudah ada, sedangkan mode **Access Point** digunakan untuk membuat jaringan WiFi yang dapat digunakan oleh perangkat lain.
+
+### 2. Bagaimana pengaruh kekuatan sinyal (RSSI) terhadap kestabilan koneksi WiFi pada perangkat IoT?
+
+RSSI atau **Received Signal Strength Indicator** menunjukkan kekuatan sinyal WiFi yang diterima oleh perangkat. Nilai RSSI biasanya berupa angka negatif, dan nilai yang semakin mendekati 0 menunjukkan bahwa sinyal semakin kuat.
+
+Pada hasil pengamatan Percobaan 2A, nilai RSSI berubah dari **-56 dBm menjadi -50 dBm**. Meskipun terdapat perubahan nilai RSSI dan IP Address, koneksi WiFi tetap stabil dan LED tetap menyala.
+
+Jadi, semakin kuat sinyal WiFi, umumnya koneksi perangkat IoT akan semakin stabil. Sebaliknya, jika sinyal semakin lemah, koneksi dapat menjadi tidak stabil, mengalami keterlambatan, atau bahkan terputus. Namun, RSSI bukan satu-satunya faktor yang menentukan kestabilan koneksi karena kondisi jaringan dan gangguan di sekitar juga dapat memengaruhinya.
+
+### 3. Bagaimana cara kerja ESP32 dalam membedakan peran sebagai klien (Station) dan sebagai penyedia jaringan (Access Point)?
+
+ESP dapat memiliki peran yang berbeda berdasarkan mode WiFi yang digunakan.
+
+Pada **mode Station (STA)**, ESP berperan sebagai **klien**. ESP mencari dan terhubung ke jaringan WiFi yang sudah tersedia menggunakan SSID dan password. Setelah berhasil terhubung, ESP mendapatkan IP Address dari jaringan tersebut dan dapat berkomunikasi melalui jaringan WiFi.
+
+Sedangkan pada **mode Access Point (AP)**, ESP berperan sebagai **penyedia jaringan**. ESP membuat jaringan WiFi sendiri menggunakan SSID dan password yang ditentukan. Perangkat lain seperti smartphone dapat mencari SSID tersebut dan terhubung ke jaringan yang dibuat oleh ESP. Pada percobaan, IP Address AP yang digunakan adalah `192.168.4.1`.
+
+Jadi, perbedaannya adalah **STA bergabung ke jaringan yang sudah ada**, sedangkan **AP membuat jaringan sendiri untuk digunakan oleh perangkat lain**.
+
+### 4. Bagaimana kombinasi mode Station dan Access Point (AP+STA) dapat dimanfaatkan dalam skenario nyata sistem IoT, misalnya pada proses konfigurasi awal perangkat (provisioning)?
+
+Mode **AP+STA** memungkinkan ESP menjalankan dua peran WiFi secara bersamaan. ESP dapat terhubung ke jaringan WiFi yang sudah tersedia sebagai **Station**, sekaligus membuat jaringan WiFi sendiri sebagai **Access Point**.
+
+Dalam proses **provisioning**, misalnya ketika perangkat IoT baru pertama kali digunakan, ESP dapat membuat Access Point sementara. Pengguna kemudian menghubungkan smartphone atau laptop ke AP tersebut untuk melakukan konfigurasi, seperti memasukkan SSID dan password WiFi rumah.
+
+Setelah konfigurasi berhasil, ESP dapat menggunakan informasi tersebut untuk terhubung ke WiFi rumah sebagai **Station**. Dengan cara ini, pengguna tidak perlu menghubungkan ESP secara langsung menggunakan kabel untuk melakukan konfigurasi jaringan.
+
+Contohnya adalah perangkat IoT seperti **smart lamp, sensor suhu, atau smart home device**. Saat pertama kali dinyalakan, perangkat membuat WiFi sendiri untuk menerima konfigurasi dari pengguna. Setelah konfigurasi selesai, perangkat terhubung ke WiFi rumah dan dapat digunakan untuk berkomunikasi dengan server atau perangkat IoT lainnya.
+
+Dengan demikian, kombinasi AP+STA membuat proses konfigurasi awal perangkat IoT menjadi lebih mudah karena ESP dapat **menyediakan jaringan untuk proses konfigurasi sekaligus terhubung ke jaringan utama setelah konfigurasi selesai**.
+
+---
+
+# J. KESIMPULAN
 
 Berdasarkan praktikum konfigurasi jaringan, dapat disimpulkan bahwa ESP dapat dikonfigurasi dalam beberapa mode jaringan WiFi, yaitu **Station (STA), Access Point (AP), dan AP+STA**.
 
@@ -605,78 +770,3 @@ Pada mode Access Point, ESP berfungsi sebagai pembuat jaringan WiFi sendiri sehi
 Selain itu, penggunaan password yang kuat diperlukan untuk menjaga keamanan jaringan. Melalui modifikasi program, ESP juga dapat bekerja dalam mode AP+STA, yaitu terhubung ke jaringan WiFi yang sudah tersedia sekaligus menyediakan Access Point untuk perangkat lain.
 
 Dengan demikian, praktikum ini memberikan pemahaman mengenai cara kerja dan konfigurasi jaringan WiFi pada ESP serta penerapannya dalam sistem IoT.
-
----
-
-# O. DOKUMENTASI PRAKTIKUM
-
-## Dokumentasi Percobaan 2A
-
-**[FOTO 1 – RANGKAIAN STA]**
-
-> Tempel foto di sini.
-
-**[FOTO 2 – SERIAL MONITOR STA]**
-
-> Tempel screenshot Serial Monitor di sini.
-
-**[FOTO 3 – HASIL LED]**
-
-> Tempel foto LED indikator di sini.
-
----
-
-## Dokumentasi Percobaan 2B
-
-**[FOTO 4 – RANGKAIAN/SETUP AP]**
-
-> Tempel foto di sini.
-
-**[FOTO 5 – SERIAL MONITOR AP]**
-
-> Tempel screenshot Serial Monitor di sini.
-
-**[FOTO 6 – SMARTPHONE TERHUBUNG AP]**
-
-> Tempel screenshot/foto smartphone yang terhubung ke AP di sini.
-
----
-
-## Dokumentasi Modifikasi Reconnect
-
-**[FOTO 7 – PROSES RECONNECT]**
-
-> Tempel screenshot Serial Monitor ketika ESP melakukan reconnect di sini.
-
----
-
-## Dokumentasi Modifikasi AP+STA
-
-**[FOTO 8 – SERIAL MONITOR AP+STA]**
-
-> Tempel screenshot Serial Monitor di sini.
-
-**[FOTO 9 – PERANGKAT TERHUBUNG AP]**
-
-> Tempel foto/screenshot perangkat yang terhubung ke AP ESP di sini.
-
-**[DIAGRAM 1 – AP+STA]**
-
-> Tempel diagram jaringan AP+STA di sini.
-
----
-
-# P. CATATAN / KENDALA PRAKTIKUM
-
-Tuliskan kendala yang dialami selama praktikum.
-
-Contoh:
-
-* Koneksi WiFi perlu menggunakan SSID dan password yang benar.
-* Jika password atau SSID salah, ESP tidak dapat menyelesaikan proses koneksi.
-* Perubahan jaringan dapat menyebabkan IP Address yang diperoleh ESP berubah.
-* Access Point perlu menggunakan password agar tidak mudah diakses oleh perangkat yang tidak berwenang.
-
-**[TEMPAT CATATAN KENDALA TAMBAHAN]**
-
-> Tambahkan kendala atau catatan lain yang ditemukan selama praktikum di sini.
