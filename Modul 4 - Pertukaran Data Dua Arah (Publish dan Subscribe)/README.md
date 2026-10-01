@@ -1,4 +1,4 @@
-# MODUL 3 - KOMUNIKASI PERTUKARAN DATA
+# MODUL 4 - KOMUNIKASI PERTUKARAN DATA
 ## A. TUJUAN PRAKTIKUM
 
 Setelah melakukan praktikum, saya memahami bahwa tujuan dari percobaan ini adalah:
