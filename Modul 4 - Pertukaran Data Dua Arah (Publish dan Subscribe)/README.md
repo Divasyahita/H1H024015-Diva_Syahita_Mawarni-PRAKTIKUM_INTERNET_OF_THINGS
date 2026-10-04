@@ -450,7 +450,7 @@ Penggunaan millis() juga membuat proses publish berjalan secara non-blocking, se
 <img width="856" height="637" alt="Percobaan 2 serial monitor" src="https://github.com/user-attachments/assets/9b51b430-b835-46e0-8998-fb6a79a3097c" />
 
 ---
-## E. PERTANYAAN PRAKTIKUM PERCOBAAN 3A: KOMUNIKASI DATA MENGGUNAKAN HTTP
+## E. PERTANYAAN PRAKTIKUM PERCOBAAN 4A: Subscribe dan Deserialisasi Data JSON untuk Kendali Aktuator
 
 ### 1. Gambarkan diagram alur (flowchart) proses penerimaan dan pemrosesan pesan pada fungsi callback di atas!
 
@@ -531,9 +531,9 @@ pesan);
 }
 ```
 ---
-## F. PERTANYAAN PRAKTIKUM PERCOBAAN 3B: KOMUNIKASI MQTT
+## F. PERTANYAAN PRAKTIKUM PERCOBAAN 4B: Pertukaran Data Dua Arah (Publish dan Subscribe Secara Bersamaan) 
 
-### 1. Apa fungsi dari topic pada protokol MQTT, dan mengapa topic yang digunakan perlu dibuat unik?
+### 1. Mengapa penggunaan delay() yang lama sebaiknya dihindari pada program yang menggabungkan proses publish dan subscribe secara bersamaan? 
 
 **Jawaban:**
 
