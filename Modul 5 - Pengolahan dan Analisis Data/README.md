@@ -41,6 +41,8 @@ Tujuan Percobaan 5A adalah memahami proses pengiriman data suhu hasil simulasi m
 
 Pada percobaan ini, ESP8266 dihubungkan ke laptop menggunakan kabel USB untuk menjalankan program dan memantau data melalui Serial Monitor. Data suhu dihasilkan melalui fungsi simulasi pada program tanpa menggunakan sensor DHT22 fisik. ESP8266 kemudian mengubah data suhu ke dalam format JSON dan mengirimkannya secara berkala ke broker MQTT melalui jaringan Wi-Fi.
 
+<img width="1280" height="720" alt="WhatsApp Image 2026-10-20 at 13 55 06" src="https://github.com/user-attachments/assets/1ae14d76-9096-4173-a17e-e288865bd46f" />
+
 ---
 ### Program
 
@@ -76,8 +78,7 @@ float bacaSuhuMock() {
     float noise     = random(-5, 6) * 0.1;
     float suhu      = suhuDasar + noise;
 
-    // Simulasi anomali suhu setiap 25 kali
-pembacaan
+    // Simulasi anomali suhu setiap 25 kali pembacaan
     if (jumlahBaca % 25 == 0) {
         suhu += 8.0;
     }
@@ -192,7 +193,8 @@ PUBLISH_INTERVAL_MS) {
 
 **Flowchart:**
 
-**[TEMPAT FOTO: Gambar 5.1 Flowchart alur percobaan 5A]**
+<img width="231" height="937" alt="Untitled Diagram drawio (5)" src="https://github.com/user-attachments/assets/2c3c42a2-0f76-45eb-9060-ef2438e764e8" />
+
 
 ### Hasil Pengamatan
 
@@ -222,7 +224,7 @@ Secara umum, percobaan ini memperlihatkan fungsi pengolahan data di sisi perangk
 
 ### Output di Serial Monitor
 
-**[TEMPAT FOTO: Gambar 5.2 Serial Monitor hasil pengolahan data suhu pada ESP32]**
+<img width="1233" height="1000" alt="WhatsApp Image 2026-10-20 at 14 12 32" src="https://github.com/user-attachments/assets/9c2235be-6731-4af1-91a5-d4385d78340f" />
 
 ```text
 
@@ -357,7 +359,7 @@ hitungMovingAverage(suhu);
 
 **Flowchart:**
 
-**[TEMPAT FOTO: Gambar 5.3 Flowchart percobaan 5B]**
+<img width="385" height="1053" alt="Untitled Diagram drawio (6)" src="https://github.com/user-attachments/assets/0ad11130-39e7-46d2-8b87-6d89c51b3598" />
 
 ### Hasil Pengamatan
 
@@ -384,7 +386,7 @@ Berdasarkan Tabel 5.2, data suhu diterima melalui MQTT setiap 5 detik dan seluru
 
 Namun, pada data ke-6 tercatat suhu sebesar 35,5°C dengan Z-score 3,65 sehingga terdeteksi sebagai anomali. Lonjakan tersebut sesuai dengan simulasi anomali suhu pada program. Hasil ini menunjukkan bahwa metode Z-score dapat membantu mengidentifikasi perubahan suhu yang tidak normal, sedangkan penyimpanan CSV memungkinkan data pengamatan digunakan kembali untuk analisis lebih lanjut.
 
-**[TEMPAT FOTO: Gambar 5.4 Serial Monitor hasil akuisisi, analisis, dan visualisasi data]**
+<img width="1280" height="720" alt="WhatsApp Image 2026-10-20 at 20 45 42" src="https://github.com/user-attachments/assets/54d53543-89f3-471d-9a64-38df4f18fed9" />
 
 ---
 ## E. PERTANYAAN PRAKTIKUM PERCOBAAN 5A: PENGOLAHAN DATA SENSOR PADA ESP32 (MOVING AVERAGE DAN STATISTIK)
@@ -393,8 +395,7 @@ Namun, pada data ke-6 tercatat suhu sebesar 35,5°C dengan Z-score 3,65 sehingga
 **Jawaban:**
 
 
-[TEMPAT FOTO: Gambar 5.4 Flowchart proses perhitungan moving average pada fungsi hitungMovingAverage()]
-pada fungsi hitungMovingAverage()
+<img width="191" height="809" alt="Untitled Diagram drawio (7)" src="https://github.com/user-attachments/assets/6225eac4-d33a-4426-8b23-e1cdda989f33" />
 
 
 ### 2. Jelaskan fungsi dari operasi (indeks + 1) % N pada program tersebut!
@@ -626,22 +627,19 @@ Tambahkan kode berikut setelah data CSV dibaca menggunakan Pandas. Contoh ini me
 df["suhu_asli"] = df["suhu"]
 
 # Menghitung moving average dengan jendela 5 data
-df["suhu_filter"] = df["suhu"].rolling(window=5,
-min_periods=1).mean()
+df["suhu_filter"] = df["suhu"].rolling(window=5, min_periods=1).mean()
 
 # Menghitung rata-rata dan simpangan baku data asli
 mean_asli = df["suhu_asli"].mean()
 std_asli = df["suhu_asli"].std()
 
 # Menghitung Z-score data asli
-df["z_asli"] = (df["suhu_asli"] - mean_asli) /
-std_asli
+df["z_asli"] = (df["suhu_asli"] - mean_asli) / std_asli
 
 # Menentukan anomali pada data asli
 df["anomali_asli"] = df["z_asli"].abs() > 2
 
-# Menghitung rata-rata dan simpangan baku data hasil
-filter
+# Menghitung rata-rata dan simpangan baku data hasil filter
 mean_filter = df["suhu_filter"].mean()
 std_filter = df["suhu_filter"].std()
 
@@ -655,17 +653,13 @@ df["z_filter"] = (
 # Menentukan anomali setelah moving average
 df["anomali_filter"] = df["z_filter"].abs() > 2
 
-
-# Menghitung jumlah anomali sebelum dan sesudah
-filter
+# Menghitung jumlah anomali sebelum dan sesudah filter
 jumlah_anomali_asli = df["anomali_asli"].sum()
 jumlah_anomali_filter = df["anomali_filter"].sum()
 
 # Menampilkan hasil perbandingan
-print("Jumlah anomali data asli:",
-jumlah_anomali_asli)
-print("Jumlah anomali setelah moving average:",
-jumlah_anomali_filter)
+print("Jumlah anomali data asli:", jumlah_anomali_asli)
+print("Jumlah anomali setelah moving average:", jumlah_anomali_filter)
 ```
 
 
@@ -691,11 +685,9 @@ print("Data awal:")
 print(df.head())
 
 # Mengubah kolom suhu menjadi numerik
-df["suhu"] = pd.to_numeric(df["suhu"],
-errors="coerce")
+df["suhu"] = pd.to_numeric(df["suhu"], errors="coerce")
 
-# Menghapus baris dengan data suhu kosong atau tidak
-valid
+# Menghapus baris dengan data suhu kosong atau tidak valid
 df = df.dropna(subset=["suhu"]).copy()
 
 # 3. Menyimpan data suhu asli
@@ -713,11 +705,9 @@ mean_asli = df["suhu_asli"].mean()
 std_asli = df["suhu_asli"].std()
 
 if std_asli != 0:
-    df["z_asli"] = (df["suhu_asli"] - mean_asli) /
-std_asli
+    df["z_asli"] = (df["suhu_asli"] - mean_asli) / std_asli
 else:
     df["z_asli"] = 0.0
-
 
 # 6. Menentukan anomali pada data asli
 df["anomali_asli"] = df["z_asli"].abs() > 2
@@ -728,8 +718,7 @@ std_filter = df["suhu_filter"].std()
 
 if std_filter != 0:
     df["z_filter"] = (
-        (df["suhu_filter"] - mean_filter) /
-std_filter
+        (df["suhu_filter"] - mean_filter) / std_filter
     )
 else:
     df["z_filter"] = 0.0
@@ -739,14 +728,12 @@ df["anomali_filter"] = df["z_filter"].abs() > 2
 
 # 9. Menghitung jumlah anomali
 jumlah_anomali_asli = int(df["anomali_asli"].sum())
-jumlah_anomali_filter =
-int(df["anomali_filter"].sum())
+jumlah_anomali_filter = int(df["anomali_filter"].sum())
 
 print("\n=== HASIL PERBANDINGAN ANOMALI ===")
 print("Jumlah data valid:", len(df))
 print("Anomali data asli:", jumlah_anomali_asli)
-print("Anomali setelah moving average:",
-jumlah_anomali_filter)
+print("Anomali setelah moving average:", jumlah_anomali_filter)
 
 # 10. Menampilkan data hasil analisis
 print("\nData hasil analisis:")
@@ -765,8 +752,7 @@ print(
 
 # 11. Menyimpan hasil analisis ke file CSV baru
 df.to_csv("hasil_analisis_iot.csv", index=False)
-print("\nHasil analisis disimpan ke
-hasil_analisis_iot.csv")
+print("\nHasil analisis disimpan ke hasil_analisis_iot.csv")
 
 # 12. Membuat grafik perbandingan suhu
 plt.figure(figsize=(10, 5))
@@ -781,33 +767,30 @@ plt.plot(
 plt.plot(
     df.index,
     df["suhu_filter"],
+    label="Moving Average (5 data)"
+)
 
+# Menandai anomali pada data asli
+anomali = df["anomali_asli"]
 
-          label="Moving Average (5 data)"
-     )
+plt.scatter(
+    df.index[anomali],
+    df.loc[anomali, "suhu_asli"],
+    marker="x",
+    s=100,
+    label="Anomali Data Asli"
+)
 
-     # Menandai anomali pada data asli
-     anomali = df["anomali_asli"]
+plt.xlabel("Indeks Data")
+plt.ylabel("Suhu (°C)")
+plt.title("Perbandingan Suhu Asli dan Moving Average")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("grafik_analisis_iot.png")
+plt.show()
 
-     plt.scatter(
-         df.index[anomali],
-         df.loc[anomali, "suhu_asli"],
-         marker="x",
-         s=100,
-         label="Anomali Data Asli"
-     )
-
-     plt.xlabel("Indeks Data")
-     plt.ylabel("Suhu (°C)")
-     plt.title("Perbandingan Suhu Asli dan Moving
-     Average")
-     plt.legend()
-     plt.grid(True)
-     plt.tight_layout()
-     plt.savefig("grafik_analisis_iot.png")
-     plt.show()
-
-     print("Grafik disimpan ke grafik_analisis_iot.png")
+print("Grafik disimpan ke grafik_analisis_iot.png")
 ```
 
 
