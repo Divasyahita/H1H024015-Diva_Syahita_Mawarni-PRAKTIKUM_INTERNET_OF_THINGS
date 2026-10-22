@@ -1,16 +1,7 @@
 
 # BUKU CATATAN / LOG PRAKTIKUM
 
-## MODUL 5 - PENGOLAHAN DAN ANALISIS DATA
-
-**Program Studi:** Teknik Komputer UNSOED  
-**Nama Kuliah (Kode):** Praktikum Sistem IoT (TK2450050)  
-**Tahun / Semester:** 2026/5  
-**Modul:** 5  
-**Nama Asisten / NIM:** Athallah Tsany Satriyaji  
-**Nama Praktikan / NIM:** Diva Syahita Mawarni / H1H024015
-
-**Filtering, Analisis, dan Visualisasi Data**
+## MODUL 5 - PENGOLAHAN DAN ANALISIS DATA | Filtering, Analisis dan Visualisasi Data 
 
 ---
 
@@ -398,78 +389,62 @@ Namun, pada data ke-6 tercatat suhu sebesar 35,5°C dengan Z-score 3,65 sehingga
 ---
 ## E. PERTANYAAN PRAKTIKUM PERCOBAAN 5A: PENGOLAHAN DATA SENSOR PADA ESP32 (MOVING AVERAGE DAN STATISTIK)
 
-1. Gambarkan diagram alur (flowchart) proses perhitungan moving average pada
-fungsi hitungMovingAverage()!
-Jawab:
+### 1. Gambarkan diagram alur (flowchart) proses perhitungan moving average pada fungsi hitungMovingAverage()!
+**Jawaban:**
 
 
 [TEMPAT FOTO: Gambar 5.4 Flowchart proses perhitungan moving average pada fungsi hitungMovingAverage()]
 pada fungsi hitungMovingAverage()
 
 
-2. Jelaskan fungsi dari operasi (indeks + 1) % N pada program tersebut!
-Jawaban:
-Operasi (indeks + 1) % N berfungsi untuk memindahkan posisi indeks ke
-elemen buffer berikutnya secara berulang. Operator modulo (%) memastikan indeks
-kembali ke 0 ketika mencapai batas maksimum buffer, yaitu 5, sehingga data baru
-dapat terus disimpan tanpa melewati kapasitas array.
+### 2. Jelaskan fungsi dari operasi (indeks + 1) % N pada program tersebut!
+**Jawaban:**
 
-3. Apa dampaknya terhadap data hasil filter apabila nilai N diperbesar menjadi 20
-atau diperkecil menjadi 2?
-Jawaban:
-Jika nilai N diperbesar menjadi 20, hasil filter akan lebih halus dan stabil karena
-menggunakan lebih banyak sampel untuk menghitung rata-rata. Namun, perubahan
-suhu akan lebih lambat terdeteksi. Sebaliknya, jika N diperkecil menjadi 2, hasil
-filter akan lebih responsif terhadap perubahan suhu, tetapi lebih mudah terpengaruh
-oleh fluktuasi data. Jadi, nilai N perlu disesuaikan agar keseimbangan antara
-kestabilan dan responsivitas data tetap terjaga.
+Operasi (indeks + 1) % N berfungsi untuk memindahkan posisi indeks ke elemen buffer berikutnya secara berulang. Operator modulo (%) memastikan indeks kembali ke 0 ketika mencapai batas maksimum buffer, yaitu 5, sehingga data baru dapat terus disimpan tanpa melewati kapasitas array. 
 
-4. Modifikasi program agar ESP32 juga menghitung simpangan baku dari data pada
-buffer, dan berikan penjelasan di setiap baris kode yang ditambahkan dalam bentuk
-README.md.
-Jawaban:
+### 3. Apa dampaknya terhadap data hasil filter apabila nilai N diperbesar menjadi 20 atau diperkecil menjadi 2?
+**Jawaban:**
 
-Menambahkan fitur perhitungan simpangan baku pada program ESP32 untuk
-mengetahui tingkat penyebaran data suhu dalam buffer. Semakin besar nilai
-simpangan baku, semakin bervariasi data suhu yang diperoleh.
+Jika nilai N diperbesar menjadi 20, hasil filter akan lebih halus dan stabil karena menggunakan lebih banyak sampel untuk menghitung rata-rata. Namun, perubahan suhu akan lebih lambat terdeteksi. Sebaliknya, jika N diperkecil menjadi 2, hasil filter akan lebih responsif terhadap perubahan suhu, tetapi lebih mudah terpengaruh oleh fluktuasi data. Jadi, nilai N perlu disesuaikan agar keseimbangan antara kestabilan dan responsivitas data tetap terjaga. 
 
-Tambahkan fungsi berikut setelah fungsi hitungMovingAverage():
+### 4. Modifikasi program agar ESP32 juga menghitung simpangan baku dari data pada buffer, dan berikan penjelasan di setiap baris kode yang ditambahkan dalam bentuk README.md.
+**Jawaban:**
+
+Menambahkan fitur perhitungan simpangan baku pada program ESP32 untuk mengetahui tingkat penyebaran data suhu dalam buffer. Semakin besar nilai simpangan baku, semakin bervariasi data suhu yang diperoleh.
+
+Tambahkan fungsi berikut setelah fungsi ```cpp hitungMovingAverage()```:
 
 ```cpp
-  // Menghitung simpangan baku dari data pada buffer
-  float hitungSimpanganBaku() {
-      if (jumlah < 2) return 0.0;
+// Menghitung simpangan baku dari data pada buffer
+float hitungSimpanganBaku() {
+    if (jumlah < 2) return 0.0;
 
-         float total = 0;
-         float rataRata = 0;
+    float total = 0;
+    float rataRata = 0;
 
-         // Menghitung total data dalam buffer
-         for (int i = 0; i < jumlah; i++) {
-             total += buffer[i];
-         }
-
-         // Menghitung rata-rata data
-         rataRata = total / jumlah;
-
-         float totalKuadrat = 0;
-
-         // Menghitung jumlah kuadrat selisih setiap
-  data
-         // terhadap rata-rata
-         for (int i = 0; i < jumlah; i++) {
-             float selisih = buffer[i] - rataRata;
-             totalKuadrat += selisih * selisih;
-         }
-
-         // Menghitung simpangan baku populasi
-         return sqrt(totalKuadrat / jumlah);
-
-
+    // Menghitung total data dalam buffer
+    for (int i = 0; i < jumlah; i++) {
+        total += buffer[i];
     }
+
+    // Menghitung rata-rata data
+    rataRata = total / jumlah;
+
+    float totalKuadrat = 0;
+
+    // Menghitung jumlah kuadrat selisih setiap data
+    // terhadap rata-rata
+    for (int i = 0; i < jumlah; i++) {
+        float selisih = buffer[i] - rataRata;
+        totalKuadrat += selisih * selisih;
+    }
+
+    // Menghitung simpangan baku populasi
+    return sqrt(totalKuadrat / jumlah);
+}
 ```
 
-Kemudian, pada fungsi loop(), tambahkan pemanggilan fungsi dan tampilkan
-hasilnya:
+Kemudian, pada fungsi loop(), tambahkan pemanggilan fungsi dan tampilkan hasilnya:
 
 ```cpp
 // Menghitung simpangan baku dari data buffer
@@ -480,9 +455,7 @@ Serial.print(" | Simpangan Baku: ");
 Serial.println(simpanganBaku);
 ```
 
-Letakkan kedua baris tambahan tersebut setelah perhitungan suhuFilter, lalu
-sesuaikan bagian output Serial Monitor agar nilai simpangan baku ikut
-ditampilkan.
+Letakkan kedua baris tambahan tersebut setelah perhitungan suhuFilter, lalu sesuaikan bagian output Serial Monitor agar nilai simpangan baku ikut ditampilkan.
 
 Kode lengkap:
 
@@ -490,10 +463,8 @@ Kode lengkap:
 #include <math.h>
 
 const int N = 5; // Jumlah sampel moving average
-float buffer[N]; // Menyimpan N pembacaan suhu
-terakhir
-int indeks = 0; // Posisi penulisan berikutnya pada
-buffer
+float buffer[N]; // Menyimpan N pembacaan suhu terakhir
+int indeks = 0; // Posisi penulisan berikutnya pada buffer
 int jumlah = 0; // Jumlah sampel yang sudah terisi
 
 float suhuMin = 1000.0;
@@ -505,20 +476,19 @@ float bacaSuhuMock() {
     jumlahBaca++;
 
     // Suhu dasar berubah secara bertahap
-    float suhuDasar = 28.0 + 2.0 * sin(jumlahBaca *
-0.08);
+    float suhuDasar = 28.0 + 2.0 * sin(jumlahBaca * 0.08);
 
-        // Noise kecil untuk simulasi fluktuasi sensor
-        float noise = random(-5, 6) * 0.1;
+    // Noise kecil untuk simulasi fluktuasi sensor
+    float noise = random(-5, 6) * 0.1;
 
-        float suhu = suhuDasar + noise;
+    float suhu = suhuDasar + noise;
 
-        // Lonjakan suhu setiap 25 pembacaan
-        if (jumlahBaca % 25 == 0) {
-            suhu += 8.0;
-        }
+    // Lonjakan suhu setiap 25 pembacaan
+    if (jumlahBaca % 25 == 0) {
+        suhu += 8.0;
+    }
 
-        return suhu;
+    return suhu;
 }
 
 // Menghitung moving average
@@ -526,10 +496,9 @@ float hitungMovingAverage(float nilaiBaru) {
     buffer[indeks] = nilaiBaru;
     indeks = (indeks + 1) % N;
 
-        if (jumlah < N) {
-            jumlah++;
-        }
-
+    if (jumlah < N) {
+        jumlah++;
+    }
 
     float total = 0;
 
@@ -577,12 +546,10 @@ void loop() {
     float suhu = bacaSuhuMock();
 
     if (isnan(suhu)) {
-        Serial.println("Pembacaan gagal, data
-diabaikan");
+        Serial.println("Pembacaan gagal, data diabaikan");
     } else {
         // Menghitung moving average
-        float suhuFilter =
-hitungMovingAverage(suhu);
+        float suhuFilter = hitungMovingAverage(suhu);
 
         // Menghitung simpangan baku
         float simpanganBaku = hitungSimpanganBaku();
@@ -593,99 +560,66 @@ hitungMovingAverage(suhu);
         }
 
         if (suhu > suhuMax) {
+            suhuMax = suhu;
+        }
 
+        // Menampilkan hasil pada Serial Monitor
+        Serial.print("Mentah: ");
+        Serial.print(suhu);
 
-                       suhuMax = suhu;
-                  }
+        Serial.print(" | Filter: ");
+        Serial.print(suhuFilter);
 
-                  // Menampilkan hasil pada Serial Monitor
-                  Serial.print("Mentah: ");
-                  Serial.print(suhu);
+        Serial.print(" | Simpangan Baku: ");
+        Serial.print(simpanganBaku);
 
-                  Serial.print(" | Filter: ");
-                  Serial.print(suhuFilter);
+        Serial.print(" | Min: ");
+        Serial.print(suhuMin);
 
-                  Serial.print(" | Simpangan Baku: ");
-                  Serial.print(simpanganBaku);
+        Serial.print(" | Max: ");
+        Serial.println(suhuMax);
+    }
 
-                  Serial.print(" | Min: ");
-                  Serial.print(suhuMin);
+    // Jeda 2 detik sebelum pembacaan berikutnya
+    delay(2000);
+}
 
-                  Serial.print(" | Max: ");
-                  Serial.println(suhuMax);
-            }
-
-            // Jeda 2 detik sebelum pembacaan berikutnya
-            delay(2000);
-      }
 ```
-
-
 Perubahan utama:
-- Fungsi hitungSimpanganBaku() menghitung simpangan baku dari
-data yang tersimpan di buffer.
-- Variabel simpanganBaku menyimpan hasil perhitungan untuk
-ditampilkan di Serial Monitor.
-- randomSeed(micros()) membantu memberikan variasi pada hasil
-simulasi acak setiap program dijalankan.
+- Fungsi hitungSimpanganBaku() menghitung simpangan baku dari data yang tersimpan di buffer.
+- Variabel simpanganBaku menyimpan hasil perhitungan untuk ditampilkan di Serial Monitor.
+- randomSeed(micros()) membantu memberikan variasi pada hasil simulasi acak setiap program dijalankan.
 
 
 ## F. PERTANYAAN PRAKTIKUM PERCOBAAN 5B: AKUISISI, ANALISIS, DAN VISUALISASI DATA
 
-1. Jelaskan fungsi dari blok try-except pada fungsi on_message() dan apa yang terjadi
-apabila blok tersebut dihilangkan!
-Jawaban:
-Blok try-except pada fungsi on_message() berfungsi untuk menangani
-kesalahan saat menerima dan memproses data dari MQTT, misalnya ketika data
-yang diterima bukan dalam format JSON yang valid atau terdapat nilai yang tidak
-sesuai. Dengan adanya blok ini, program dapat menampilkan pesan kesalahan dan
-tetap berjalan tanpa langsung berhenti.
+### 1. Jelaskan fungsi dari blok try-except pada fungsi on_message() dan apa yang terjadi apabila blok tersebut dihilangkan!
+**Jawaban:**
 
-Jika blok try-except dihilangkan, kesalahan saat memproses data dapat
-menimbulkan exception yang tidak tertangani sehingga proses pengolahan pesan
-terganggu atau program berhenti, bergantung pada penanganan kesalahan di bagian
-program lainnya.
+Blok try-except pada fungsi on_message() berfungsi untuk menangani kesalahan saat menerima dan memproses data dari MQTT, misalnya ketika data yang diterima bukan dalam format JSON yang valid atau terdapat nilai yang tidak sesuai. Dengan adanya blok ini, program dapat menampilkan pesan kesalahan dan tetap berjalan tanpa langsung berhenti. 
 
-2. Jelaskan arti nilai z-score dan mengapa batas |z| > 2 digunakan sebagai penentu
-anomali!
-Jawaban:
-Z-score adalah nilai yang menunjukkan seberapa jauh suatu data menyimpang dari
-nilai rata-rata dalam satuan simpangan baku. Nilai Z-score positif menunjukkan
-data berada di atas rata-rata, sedangkan nilai negatif menunjukkan data berada di
-bawah rata-rata.
+Jika blok try-except dihilangkan, kesalahan saat memproses data dapat menimbulkan exception yang tidak tertangani sehingga proses pengolahan pesan terganggu atau program berhenti, bergantung pada penanganan kesalahan di bagian program lainnya. 
 
-Batas |𝑧| > 2 digunakan untuk menandai anomali karena data tersebut berada
-lebih dari dua simpangan baku dari rata-rata, sehingga dianggap menyimpang dari
+### 2. Jelaskan arti nilai z-score dan mengapa batas |z| > 2 digunakan sebagai penentu anomali!
+***Jawaban:***
 
+Z-score adalah nilai yang menunjukkan seberapa jauh suatu data menyimpang dari nilai rata-rata dalam satuan simpangan baku. Nilai Z-score positif menunjukkan data berada di atas rata-rata, sedangkan nilai negatif menunjukkan data berada di bawah rata-rata. 
 
-pola normal. Dengan demikian, metode Z-score membantu mendeteksi perubahan
-suhu yang tidak biasa pada sistem IoT.
+Batas 
+|z|>2 digunakan untuk menandai anomali karena data tersebut berada lebih dari dua simpangan baku dari rata-rata, sehingga dianggap menyimpang dari pola normal. Dengan demikian, metode Z-score membantu mendeteksi perubahan suhu yang tidak biasa pada sistem IoT.  
 
-3. Apa kelemahan metode z-score apabila data memiliki tren naik atau turun yang
-tajam?
-Jawaban:
-Kelemahan metode Z-score adalah data yang memiliki tren naik atau turun tajam
-dapat dianggap sebagai anomali, padahal perubahan tersebut merupakan pola
-normal dari data. Hal ini terjadi karena Z-score menggunakan rata-rata dan
-simpangan baku sebagai acuan tanpa mempertimbangkan tren waktu. Akibatnya,
-metode ini dapat menghasilkan deteksi anomali yang kurang akurat. Salah satu
-solusinya adalah menggunakan metode deteksi anomali yang mempertimbangkan
-tren atau perubahan data dari waktu ke waktu.
+### 3. Apa kelemahan metode z-score apabila data memiliki tren naik atau turun yangtajam?
+***Jawaban:***
 
-4. Modifikasi program agar menggunakan metode moving average (jendela 5 data)
-pada data hasil CSV sebelum dihitung z-score-nya, kemudian bandingkan jumlah
-anomali yang terdeteksi, dan berikan penjelasan di setiap baris kode yang
-ditambahkan dalam bentuk README.md.
-Jawaban:
+Kelemahan metode Z-score adalah data yang memiliki tren naik atau turun tajam dapat dianggap sebagai anomali, padahal perubahan tersebut merupakan pola normal dari data. Hal ini terjadi karena Z-score menggunakan rata-rata dan simpangan baku sebagai acuan tanpa mempertimbangkan tren waktu. Akibatnya, metode ini dapat menghasilkan deteksi anomali yang kurang akurat. Salah satu solusinya adalah menggunakan metode deteksi anomali yang mempertimbangkan tren atau perubahan data dari waktu ke waktu. 
 
-Tujuan:
-Memodifikasi program analisis data IoT dengan menerapkan metode moving
-average menggunakan jendela 5 data sebelum perhitungan Z-score. Hasilnya
-dibandingkan dengan deteksi anomali pada data suhu asli untuk mengetahui
-pengaruh filter terhadap jumlah anomali yang terdeteksi.
+### 4. Modifikasi program agar menggunakan metode moving average (jendela 5 data) pada data hasil CSV sebelum dihitung z-score-nya, kemudian bandingkan jumlah anomali yang terdeteksi, dan berikan penjelasan di setiap baris kode yang ditambahkan dalam bentuk README.md.
+***Jawaban:***
+#### Tujuan:
+Memodifikasi program analisis data IoT dengan menerapkan metode moving average menggunakan jendela 5 data sebelum perhitungan Z-score. Hasilnya dibandingkan dengan deteksi anomali pada data suhu asli untuk mengetahui pengaruh filter terhadap jumlah anomali yang terdeteksi.
 
-Tambahkan kode berikut setelah data CSV dibaca menggunakan Pandas. Contoh
-ini mengasumsikan nama kolom suhu pada CSV adalah suhu.
+Tambahkan kode berikut setelah data CSV dibaca menggunakan Pandas. Contoh ini mengasumsikan nama kolom suhu pada CSV adalah suhu.
+
 
 ```python
 # Menyimpan data suhu asli
@@ -735,16 +669,14 @@ jumlah_anomali_filter)
 ```
 
 
-Perbandingan Hasil
+#### Perbandingan Hasil
 
-Metode                     Hasil yang diamati
+| Metode | Hasil yang Diamati |
+|---|---|
+| Z-Score data asli | Jumlah anomali sebelum filter diterapkan. |
+| Moving Average + Z-Score | Jumlah anomali setelah fluktuasi data dihaluskan. |
 
-Z-Score data asli          Jumlah anomali sebelum filter diterapkan
-
-Moving average + Z-score   Jumlah anomali setelah fluktuasi data
-dihaluskan
-
-Kode Lengkap
+#### Kode Lengkap
 
 ```python
 import pandas as pd
@@ -881,81 +813,36 @@ plt.plot(
 
 ## G. PERTANYAAN ANALISIS
 
-1. Uraikan hasil tugas pada praktikum yang telah dilakukan pada setiap percobaan!
-Jawaban:
-Pada praktikum Modul 5, Percobaan 1A dilakukan pengolahan data suhu pada
-perangkat dengan metode moving average untuk menghaluskan fluktuasi data serta
-mengetahui suhu minimum dan maksimum. Percobaan 2A dilakukan pengolahan
-data pada komputer sehingga data dapat dianalisis lebih lanjut.
+### 1. Uraikan hasil tugas pada praktikum yang telah dilakukan pada setiap percobaan!
+***Jawaban:***
 
-Pada Percobaan 5A, data suhu simulasi dikirimkan menggunakan ESP8266 melalui
-protokol MQTT dalam format JSON secara berkala. Selanjutnya, Percobaan 5B
-dilakukan penerimaan data MQTT menggunakan Python, penyimpanan data ke
-CSV, serta analisis dan deteksi anomali menggunakan metode Z-score. Modifikasi
-moving average sebelum perhitungan Z-score juga dilakukan untuk
-membandingkan jumlah anomali sebelum dan sesudah data difilter.
+Pada praktikum Modul 5, Percobaan 1A dilakukan pengolahan data suhu pada perangkat dengan metode moving average untuk menghaluskan fluktuasi data serta mengetahui suhu minimum dan maksimum. Percobaan 2A dilakukan pengolahan data pada komputer sehingga data dapat dianalisis lebih lanjut. 
 
-2. Bandingkan pengolahan data di sisi perangkat (Percobaan 1A) dengan pengolahan
-data di sisi komputer (Percobaan 2A) dari segi kecepatan, kompleksitas analisis,
-dan kebutuhan sumber daya!
-Jawaban:
-Pengolahan data di sisi perangkat pada Percobaan 1A memiliki respons yang cepat
-karena data langsung diproses oleh mikrokontroler tanpa harus dikirim ke
-komputer. Namun, kemampuan analisisnya terbatas oleh kapasitas memori dan
-pemrosesan perangkat.
+Pada Percobaan 5A, data suhu simulasi dikirimkan menggunakan ESP8266 melalui protokol MQTT dalam format JSON secara berkala. Selanjutnya, Percobaan 5B dilakukan penerimaan data MQTT menggunakan Python, penyimpanan data ke CSV, serta analisis dan deteksi anomali menggunakan metode Z-score. Modifikasi moving average sebelum perhitungan Z-score juga dilakukan untuk membandingkan jumlah anomali sebelum dan sesudah data difilter.
 
-Sebaliknya, pengolahan data di sisi komputer pada Percobaan 2A memungkinkan
-analisis yang lebih kompleks karena didukung oleh sumber daya komputasi yang
-lebih besar serta berbagai library pengolahan data. Akan tetapi, prosesnya dapat
-membutuhkan waktu tambahan untuk mengirimkan data ke komputer. Dengan
-demikian, pengolahan pada perangkat lebih cocok untuk respons langsung,
-sedangkan pengolahan pada komputer lebih sesuai untuk analisis data yang lebih
-mendalam.
+### 2. Bandingkan pengolahan data di sisi perangkat (Percobaan 1A) dengan pengolahan data di sisi komputer (Percobaan 2A) dari segi kecepatan, kompleksitas analisis, dan kebutuhan sumber daya!
+***Jawaban:***
 
+Pengolahan data di sisi perangkat pada Percobaan 1A memiliki respons yang cepat karena data langsung diproses oleh mikrokontroler tanpa harus dikirim ke komputer. Namun, kemampuan analisisnya terbatas oleh kapasitas memori dan pemrosesan perangkat. 
 
-3. Bagaimana pengaruh pemilihan ukuran jendela moving average terhadap kualitas
-data dan kecepatan respons sistem kendali apabila data tersebut digunakan untuk
-mengendalikan aktuator?
-Jawaban:
-Ukuran jendela moving average memengaruhi tingkat kehalusan data dan
-kecepatan respons sistem kendali. Jendela yang lebih besar menghasilkan data
-yang lebih stabil karena fluktuasi dapat dikurangi, tetapi respons terhadap
-perubahan kondisi menjadi lebih lambat. Sebaliknya, jendela yang lebih kecil
-membuat sistem lebih cepat merespons perubahan, tetapi data hasil filter lebih
-mudah terpengaruh oleh gangguan.
+Sebaliknya, pengolahan data di sisi komputer pada Percobaan 2A memungkinkan analisis yang lebih kompleks karena didukung oleh sumber daya komputasi yang lebih besar serta berbagai library pengolahan data. Akan tetapi, prosesnya dapat membutuhkan waktu tambahan untuk mengirimkan data ke komputer. Dengan demikian, pengolahan pada perangkat lebih cocok untuk respons langsung, sedangkan pengolahan pada komputer lebih sesuai untuk analisis data yang lebih mendalam. 
 
-Oleh karena itu, ukuran jendela perlu disesuaikan dengan kebutuhan sistem agar
-data cukup stabil tanpa menyebabkan keterlambatan respons aktuator.
+### 3. Bagaimana pengaruh pemilihan ukuran jendela moving average terhadap kualitas data dan kecepatan respons sistem kendali apabila data tersebut digunakan untuk mengendalikan aktuator?
+***Jawaban:***
 
-4. Bagaimana hasil analisis dan deteksi anomali dapat dimanfaatkan untuk
-meningkatkan keandalan sistem IoT, misalnya pada sistem smart farming atau
-smart home?
-Jawaban:
-Hasil analisis dan deteksi anomali dapat digunakan untuk mengenali kondisi yang
-tidak normal sehingga tindakan penanganan dapat dilakukan lebih cepat. Pada
-sistem smart farming, misalnya, lonjakan suhu atau perubahan kelembapan tanah
-yang tidak wajar dapat menjadi dasar untuk memeriksa sensor atau menyesuaikan
-penyiraman.
+Ukuran jendela moving average memengaruhi tingkat kehalusan data dan kecepatan respons sistem kendali. Jendela yang lebih besar menghasilkan data yang lebih stabil karena fluktuasi dapat dikurangi, tetapi respons terhadap perubahan kondisi menjadi lebih lambat. Sebaliknya, jendela yang lebih kecil membuat sistem lebih cepat merespons perubahan, tetapi data hasil filter lebih mudah terpengaruh oleh gangguan. 
 
-Pada sistem smart home, anomali suhu dapat digunakan untuk mendeteksi potensi
-gangguan pendingin ruangan atau kondisi lingkungan yang tidak biasa. Dengan
-demikian, analisis data dan deteksi anomali membantu mengurangi risiko
-kesalahan, mendukung pemeliharaan sistem, serta meningkatkan keandalan
-perangkat IoT
+Oleh karena itu, ukuran jendela perlu disesuaikan dengan kebutuhan sistem agar data cukup stabil tanpa menyebabkan keterlambatan respons aktuator. 
+
+### 4. Bagaimana hasil analisis dan deteksi anomali dapat dimanfaatkan untuk meningkatkan keandalan sistem IoT, misalnya pada sistem smart farming atau smart home?
+***Jawaban:***
+
+Hasil analisis dan deteksi anomali dapat digunakan untuk mengenali kondisi yang tidak normal sehingga tindakan penanganan dapat dilakukan lebih cepat. Pada sistem smart farming, misalnya, lonjakan suhu atau perubahan kelembapan tanah yang tidak wajar dapat menjadi dasar untuk memeriksa sensor atau menyesuaikan penyiraman. 
+
+Pada sistem smart home, anomali suhu dapat digunakan untuk mendeteksi potensi gangguan pendingin ruangan atau kondisi lingkungan yang tidak biasa. Dengan demikian, analisis data dan deteksi anomali membantu mengurangi risiko kesalahan, mendukung pemeliharaan sistem, serta meningkatkan keandalan perangkat IoT.
 
 ## H. KESIMPULAN
 
-Berdasarkan praktikum IoT Modul 5 tentang Pengolahan dan Analisis Data IoT,
-dapat disimpulkan bahwa data yang dihasilkan oleh sistem IoT dapat diolah untuk
-memperoleh informasi yang lebih akurat dan bermanfaat. Metode moving average
-digunakan untuk mengurangi fluktuasi data melalui perhitungan rata-rata beberapa sampel,
-sedangkan metode Z-score digunakan untuk mendeteksi nilai yang menyimpang dari pola
-normal.
+Berdasarkan praktikum IoT Modul 5 tentang Pengolahan dan Analisis Data IoT, dapat disimpulkan bahwa data yang dihasilkan oleh sistem IoT dapat diolah untuk memperoleh informasi yang lebih akurat dan bermanfaat. Metode moving average digunakan untuk mengurangi fluktuasi data melalui perhitungan rata-rata beberapa sampel, sedangkan metode Z-score digunakan untuk mendeteksi nilai yang menyimpang dari pola normal. 
 
-Pada percobaan pengiriman data menggunakan ESP8266 dan MQTT, data suhu hasil
-simulasi dapat dikirim dalam format JSON dan diterima untuk dianalisis serta disimpan ke
-dalam file CSV. Praktikum ini juga menunjukkan bahwa ukuran jendela moving average
-memengaruhi tingkat kehalusan data dan kecepatan respons sistem. Dengan demikian,
-pengolahan dan analisis data berperan penting dalam meningkatkan keandalan sistem IoT,
-termasuk untuk mendeteksi kondisi tidak normal dan mendukung pengambilan keputusan
-pada penerapan seperti smart farming dan smart home.
+Pada percobaan pengiriman data menggunakan ESP8266 dan MQTT, data suhu hasil simulasi dapat dikirim dalam format JSON dan diterima untuk dianalisis serta disimpan ke dalam file CSV. Praktikum ini juga menunjukkan bahwa ukuran jendela moving average memengaruhi tingkat kehalusan data dan kecepatan respons sistem. Dengan demikian, pengolahan dan analisis data berperan penting dalam meningkatkan keandalan sistem IoT, termasuk untuk mendeteksi kondisi tidak normal dan mendukung pengambilan keputusan pada penerapan seperti smart farming dan smart home. 
